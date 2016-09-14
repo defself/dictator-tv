@@ -1,68 +1,7 @@
-import { Component } from '@angular/core';
-import { User } from './user';
+import { Component, OnInit } from '@angular/core';
 
-const USERS: User[] = [
-  { id: 11,
-    name: 'Mr. Nice',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 12,
-    name: 'Narco',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 13,
-    name: 'Bombasto',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 14,
-    name: 'Celeritas',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 15,
-    name: 'Magneta',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 16,
-    name: 'RubberMan',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 17,
-    name: 'Dynama',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 18,
-    name: 'Dr IQ',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 19,
-    name: 'Magma',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  },
-  { id: 20,
-    name: 'Tornado',
-    city: 'Uzhhorod',
-    address: 'Dobrolyubova 6/50',
-    sex: true
-  }
-];
+import { User } from './user';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'dictator-app',
@@ -127,15 +66,26 @@ const USERS: User[] = [
       margin-right: .8em;
       border-radius: 4px 0 0 4px;
     }
-  `]
+  `],
+  providers: [UserService]
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = "Dictator's respected Users";
-  users = USERS;
+  users: User[];
   selectedUser: User;
+
+  constructor(private userService: UserService) { }
+
+  ngOnInit(): void {
+    this.getUsers();
+  }
 
   onSelect(user: User): void {
     this.selectedUser = user;
+  }
+
+  getUsers(): void {
+    this.userService.getUsers().then(users => this.users = users);
   }
 }
