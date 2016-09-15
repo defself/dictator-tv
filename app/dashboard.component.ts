@@ -1,8 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router }            from '@angular/router';
+
+import { User }              from './user';
+import { UserService }       from './user.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'my-dashboard',
-  template: '<h3>My Dashboard</h3>'
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.css']
 })
 
-export class DashboardComponent { }
+export class DashboardComponent implements OnInit {
+  users: User[] = [];
+
+  constructor(
+    private router: Router,
+    private userService: UserService) {
+  }
+
+  ngOnInit(): void {
+    this.userService.getUsers()
+        .then(users => this.users = users.slice(1, 5));
+  }
+
+  gotoDetail(user: User): void {
+    let link = ['/users', user.id];
+    this.router.navigate(link);
+  }
+}
