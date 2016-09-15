@@ -9,20 +9,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var user_1 = require('./user');
+var router_1 = require('@angular/router');
+var user_service_1 = require('./user.service');
 var UserDetailComponent = (function () {
-    function UserDetailComponent() {
+    function UserDetailComponent(userService, route) {
+        this.userService = userService;
+        this.route = route;
     }
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', user_1.User)
-    ], UserDetailComponent.prototype, "user", void 0);
+    UserDetailComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params.forEach(function (params) {
+            var id = +params['id'];
+            _this.userService.getUser(id)
+                .then(function (user) { return _this.user = user; });
+        });
+    };
+    UserDetailComponent.prototype.goBack = function () {
+        window.history.back();
+    };
     UserDetailComponent = __decorate([
         core_1.Component({
+            moduleId: module.id,
             selector: 'user-detail',
-            template: "\n    <div *ngIf=\"user\">\n      <h2>{{user.name}} details!</h2>\n      <div><label>id: </label>{{user.id}}</div>\n      <div>\n        <label>name: </label>\n        <input [(ngModel)]=\"user.name\" placeholder=\"name\"/>\n      </div>\n    </div>\n  "
+            templateUrl: 'user-detail.component.html',
+            styleUrls: ['user-detail.component.css']
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [user_service_1.UserService, router_1.ActivatedRoute])
     ], UserDetailComponent);
     return UserDetailComponent;
 }());
